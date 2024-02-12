@@ -5,7 +5,7 @@ defmodule Fizzbuzz do
     And a number that is multiple of 5 is replaced by the word Buzz.
     If the number is multiple of both 5 and 3, it's replaced by FizzBuzz.
   """
-  def is_multiple(number) do
+  defp is_multiple(number) do
     cond do
       rem(number, 3) == 0 and rem(number,5) == 0 -> 'FizzBuzz'
       rem(number, 3) == 0 -> 'Fizz'
@@ -13,18 +13,21 @@ defmodule Fizzbuzz do
       true -> number
     end
   end
-  def read(file_name) do
-    file = File.read(file_name)
-    case file do
-      {:ok, list} -> String.split(String.replace(list, "\n", ""), ",")
-      {:error, _} -> "File does not exist"
-    end
-  end
-  
-  def fizzbuzz(file_name) do
-    read(file_name)
+ 
+ defp handle_file({:ok, result}) do
+    result
+    |> String.replace("\n", "")
+    |> String.split(",")
     |> Enum.map(&String.to_integer/1)
     |> Enum.map(&is_multiple/1)
+  end
+  
+  defp handle_file({:error, reason}), do: "Error reading file: #{reason}"
+  
+  def main(file_name) do
+    file_name
+    |> File.read
+    |> handle_file 
   end
 
 end

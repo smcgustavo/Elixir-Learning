@@ -14,15 +14,17 @@ defmodule Fizzbuzz do
     end
   end
  
- defp handle_file({:ok, result}) do
-    result
+ defp handle_file({:ok, file}) do
+    result = 
+    file
     |> String.replace("\n", "")
     |> String.split(",")
     |> Enum.map(&String.to_integer/1)
     |> Enum.map(&is_multiple/1)
+    {:ok, result}
   end
   
-  defp handle_file({:error, reason}), do: "Error reading file: #{reason}"
+  defp handle_file({:error, reason}), do: {:error, "Error reading file: #{reason}"}
   
   def main(file_name) do
     file_name
